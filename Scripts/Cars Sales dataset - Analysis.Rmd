@@ -1,0 +1,112 @@
+---
+title: "R Markdown for Assignment 3"
+author: "Sebastian Rincon"
+date: "2024-04-12"
+---
+
+# Analysis Report of the car sales  dataset in R
+## by Sebastian Rincon 
+
+### Dataset source: https://www.kaggle.com/datasets/syedanwarafridi/vehicle-sales-data?resource=download
+
+```{r Code chunk 1}
+#Upload Libraries
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(stats)
+library(lubridate)
+library(magrittr)
+library(psych)
+library(tidyverse)
+```
+
+```{r Code chunk 2}
+#Upload Dataset
+cars <- data.frame(read.csv("car_prices.csv"))
+head(cars)
+```
+
+```{r}
+#Convert to lower case the model and make column to avoid duplicate categories
+cars$make <- tolower(cars$make)
+cars$model <- tolower(cars$model)
+```
+
+
+### Let's create a descriptive analysis of the variables for this dataset:
+
+```{r code chunk 3}
+#descriptive Statistics
+describe(cars)
+```
+
+We can observe that the the mean price for a vehicle in the US using the trimmed mean that provides more precise calculations is around 12.579 which is actually pretty close to the MMR (Market value) having an average price of 12.729. In terms of mileage the average is around 61.516 miles and if we link this value with the average year of the car which is 2010, we could say that this is a dealer that handles cars in good condition, with low miles due to that the majority of the cars don't have more than 15 years.
+
+##Now let's change the format of the sale date to make it proper for data analysis
+
+```{r}
+
+# Convert saledate to datetime and add as a new column
+cars$date <- mdy_hms(cars$saledate)
+
+#remove the old column
+cars <- subset(cars, select = -saledate)
+```
+
+## the next step is creating some graphics to show the relationships between variables
+
+```{r}
+ggplot(cars, aes(x = date, y = sellingprice)) +
+  geom_line() +
+  labs(title = "Price of Cars Over Time", x = "Sale Date", y = "Price")
+```
+### explore the sales distribution by vehicle make and model:
+
+```{r}
+# Bar plot for make
+ggplot(cars, aes(x = make)) +
+  geom_bar(fill = "lightblue", color = "black", alpha = 0.8) +
+  labs(title = "Sales Distribution by Make", x = "Make", y = "Count")+
+  theme(axis.text.x = element_text(angle =90, hjust = 1))
+```
+```{r}
+brand_counts <- table(cars$make)
+brand_counts <- sort(brand_counts, decreasing = TRUE)
+brand_counts
+```
+### we can observe that Ford is the leading brand with 93.997 cars sold, followed by Chevy with 60.587 and nissan with 54.017
+
+```{r}
+# Histogram and density plots for year
+ggplot(cars, aes(x = year)) +
+  geom_histogram(fill = "lightblue", color = "black", alpha = 0.8, bins = 10) +
+  geom_density(aes(y = ..count..), fill = "orange", alpha = 0.5) +
+  labs(title = "Sales Distribution by Year", x = "Year", y = "Density")+
+  theme(axis.text.x = element_text(angle =90, hjust = 1))
+```
+
+
+```{r}
+# Histogram and density plots for mileage
+ggplot(cars, aes(x = odometer)) +
+  geom_histogram(fill = "lightblue", color = "black", alpha = 0.8, bins = 20) +
+  geom_density(aes(y = ..count..), fill = "orange", alpha = 0.5) +
+  labs(title = "Distribution of Mileage", x = "Mileage", y = "Density") +
+  theme(axis.text.x = element_text(angle =90, hjust = 1))
+```
+
+
+```{r}
+# Histogram and density plots for price
+ggplot(cars, aes(x = sellingprice)) +
+  geom_histogram(fill = "lightblue", color = "black", alpha = 0.8, bins = 20) +
+  geom_density(aes(y = ..count..), fill = "orange", alpha = 0.5) +
+  labs(title = "Distribution of Prices", x = "Price", y = "Density")+
+  theme(axis.text.x = element_text(angle =90, hjust = 1))
+```
+
+
+
+```
+

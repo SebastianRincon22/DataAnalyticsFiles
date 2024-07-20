@@ -1,0 +1,35 @@
+---
+title: "R Markdown Basic Data Visualization"
+author: "Sebastian Rincon"
+date: "2024-04-12"
+output: html_document
+---
+
+# Analysis Report of the Quakes dataset in R
+
+## by Sebastian Rincon
+
+**Create R code Block**
+
+```{r Code block 1}
+data("quakes")
+str(quakes)
+plot(quakes)
+
+```
+
+```{r code block 2}
+hist(quakes$mag)
+barplot(quakes$stations)
+plot(quakes)
+```
+
+**Create a plain code block**
+
+```         
+The maximum magnitud of an earthquake is 6.40
+The minimum magnitud of an earthquake is 4.00
+
+The maximum magnitud of an earthquake is `r max(quakes$mag)`
+The minimum magnitud of an earthquake is `r min(quakes$mag)`
+```
