@@ -1,5 +1,5 @@
 ---
-title: "R Markdown for Assignment 3"
+title: "R Markdown for car sales"
 author: "Sebastian Rincon"
 date: "2024-04-12"
 ---
